@@ -1,0 +1,47 @@
+PODS:
+  - AFNetworking (2.5.4):
+    - AFNetworking/NSURLConnection (= 2.5.4)
+    - AFNetworking/NSURLSession (= 2.5.4)
+    - AFNetworking/Reachability (= 2.5.4)
+    - AFNetworking/Security (= 2.5.4)
+    - AFNetworking/Serialization (= 2.5.4)
+    - AFNetworking/UIKit (= 2.5.4)
+  - AFNetworking/NSURLConnection (2.5.4):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.5.4):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.5.4)
+  - AFNetworking/Security (2.5.4)
+  - AFNetworking/Serialization (2.5.4)
+  - AFNetworking/UIKit (2.5.4):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+  - Aspects (1.4.1)
+  - MBProgressHUD (0.9.2)
+  - MMiflyMSC (0.0.5)
+  - MuPDF (1.8.2)
+  - YRJSONAdapter (1.0.1)
+
+DEPENDENCIES:
+  - AFNetworking
+  - Aspects (~> 1.4.1)
+  - MBProgressHUD (~> 0.9.2)
+  - MMiflyMSC (~> 0.0.5)
+  - MuPDF
+  - YRJSONAdapter (~> 1.0.1)
+
+SPEC CHECKSUMS:
+  AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
+  Aspects: 7595ba96a6727a58ebcbfc954497fc5d2fdde546
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
+  MMiflyMSC: d73ae9a75616ffda903114a0eee66f9bec080fe4
+  MuPDF: 9b2f34a25d0e1b0ef42cbb2b377dcfc06b5d4fa0
+  YRJSONAdapter: 55956d3e6f6b6eadf05e734914b8d29afa0fc06b
+
+PODFILE CHECKSUM: ac933fc20f18f95bf3e87154f66d4259e4ea2713
+
+COCOAPODS: 1.0.0.beta.4

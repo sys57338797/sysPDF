@@ -1,0 +1,11 @@
+CONFIGURATION_BUILD_DIR = $PODS_SHARED_BUILD_DIR/MuPDF
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/MuPDF" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/Aspects" "${PODS_ROOT}/Headers/Public/MBProgressHUD" "${PODS_ROOT}/Headers/Public/MMiflyMSC" "${PODS_ROOT}/Headers/Public/MuPDF" "${PODS_ROOT}/Headers/Public/YRJSONAdapter"
+LIBRARY_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/MuPDF/build"
+OTHER_LDFLAGS = -l"freetype" -l"jbig2dec" -l"jpeg" -l"mujs" -l"mupdfcore" -l"openjpeg" -l"z"
+PODS_ROOT = ${SRCROOT}
+PODS_SHARED_BUILD_DIR = $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
+SKIP_INSTALL = YES
+USER_HEADER_SEARCH_PATHS = "${PODS_ROOT}/MuPDF/platform/ios" "${PODS_ROOT}/MuPDF/platform/ios/Classes"
+USE_HEADERMAP = NO

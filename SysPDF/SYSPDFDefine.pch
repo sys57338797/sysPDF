@@ -1,0 +1,41 @@
+//
+//  GJDefine.pch
+//  CheWeiGuanJia
+//
+//  Created by mutouren on 15/4/14.
+//  Copyright (c) 2015年 www.cheweiguanjia.com. All rights reserved.
+//
+
+#ifndef SYSPDF_Define_pch
+#define SYSPDF_Define_pch
+
+
+#pragma mark - RGBA颜色
+#define RGBA(r, g, b, a) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
+
+#pragma mark NSLog 是否使用的宏
+#ifndef __ISRELEASE
+#define __ISRELEASE 1
+#endif
+#define COMPILEVER __ISRELEASE
+#if COMPILEVER
+#    define NSLog(...) NSLog(__VA_ARGS__)
+#else
+#    define NSLog(...) {}
+#endif
+
+// 高德地图SDK Key
+#ifdef APP_ACOUNT_TYPE_51QC
+    #define MAPAPPKey @"e410777ddb792f9870ac49176871f72a"
+#endif
+
+#ifdef APP_ACOUNT_TYPE_QIYE
+    #define MAPAPPKey @"9aac7f52b3c11f701de711ae0362b9dc"
+#endif
+
+// 讯飞语音SDK Key
+#define kiFlyKey @"56ebc0e1"
+
+
+
+#endif
