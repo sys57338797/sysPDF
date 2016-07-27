@@ -93,9 +93,18 @@
         
         [self resetZoomAnimated:NO];
         
+        UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTap:)];
+        [singleTapGestureRecognizer setNumberOfTapsRequired:1];
+        [self addGestureRecognizer:singleTapGestureRecognizer];
+        
 //        [self loadPage];
     }
     return self;
+}
+
+- (void)onTap:(id)sender
+{
+    NSLog(@"mutowuren111");
 }
 
 - (void)setContentSize:(CGSize)contentSize
@@ -262,7 +271,7 @@
                     }
                     
                     _tileView = [[UIImageView alloc] initWithFrame: frame];
-                    [_tileView setBackgroundColor:[UIColor redColor]];
+                    [_tileView setBackgroundColor:[UIColor clearColor]];
                     [_tileView setImage:image];
                     [self addSubview:_tileView];
                     if (_hitView)
