@@ -22,6 +22,8 @@
 		CF3887261CAA645400E0A658 /* word_cell_sound_btn_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CF3887251CAA645400E0A658 /* word_cell_sound_btn_nor@2x.png */; };
 		CF5981641CBCD0F10087E88E /* PDFMuPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = CF5981631CBCD0F10087E88E /* PDFMuPageView.m */; };
 		CF5981671CBCE0740087E88E /* PDFMuHitView.m in Sources */ = {isa = PBXBuildFile; fileRef = CF5981661CBCE0740087E88E /* PDFMuHitView.m */; };
+		CF5A50C61D4F88C30076BC77 /* PDFMuTextSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = CF5A50C51D4F88C30076BC77 /* PDFMuTextSelectView.m */; };
+		CF5A50C91D4F92DB0076BC77 /* PDFMuWord.m in Sources */ = {isa = PBXBuildFile; fileRef = CF5A50C81D4F92DB0076BC77 /* PDFMuWord.m */; };
 		CF69EEBC1CBB519700D9CD11 /* nav_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CF69EEBB1CBB519700D9CD11 /* nav_back@2x.png */; };
 		CF74C8171C9F875100474B82 /* ALView+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CF74C80F1C9F875100474B82 /* ALView+PureLayout.m */; };
 		CF74C8181C9F875100474B82 /* NSArray+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CF74C8111C9F875100474B82 /* NSArray+PureLayout.m */; };
@@ -127,6 +129,10 @@
 		CF5981631CBCD0F10087E88E /* PDFMuPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFMuPageView.m; sourceTree = "<group>"; };
 		CF5981651CBCE0740087E88E /* PDFMuHitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFMuHitView.h; sourceTree = "<group>"; };
 		CF5981661CBCE0740087E88E /* PDFMuHitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFMuHitView.m; sourceTree = "<group>"; };
+		CF5A50C41D4F88C30076BC77 /* PDFMuTextSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFMuTextSelectView.h; sourceTree = "<group>"; };
+		CF5A50C51D4F88C30076BC77 /* PDFMuTextSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFMuTextSelectView.m; sourceTree = "<group>"; };
+		CF5A50C71D4F92DB0076BC77 /* PDFMuWord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFMuWord.h; sourceTree = "<group>"; };
+		CF5A50C81D4F92DB0076BC77 /* PDFMuWord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFMuWord.m; sourceTree = "<group>"; };
 		CF69EEBB1CBB519700D9CD11 /* nav_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_back@2x.png"; sourceTree = "<group>"; };
 		CF74C80E1C9F875100474B82 /* ALView+PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALView+PureLayout.h"; sourceTree = "<group>"; };
 		CF74C80F1C9F875100474B82 /* ALView+PureLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALView+PureLayout.m"; sourceTree = "<group>"; };
@@ -355,6 +361,8 @@
 		BCBF10521AA82E5400700936 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				CF5A50C71D4F92DB0076BC77 /* PDFMuWord.h */,
+				CF5A50C81D4F92DB0076BC77 /* PDFMuWord.m */,
 				CF74C82D1C9F9FBC00474B82 /* MuPDFWordInfoObj.h */,
 				CF74C82E1C9F9FBC00474B82 /* MuPDFWordInfoObj.m */,
 				CF74C82F1C9F9FBC00474B82 /* PDFBookObj.h */,
@@ -524,6 +532,8 @@
 		CF7E842A1C98F768000652D4 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				CF5A50C41D4F88C30076BC77 /* PDFMuTextSelectView.h */,
+				CF5A50C51D4F88C30076BC77 /* PDFMuTextSelectView.m */,
 				CF8E295D1CA148B40050E080 /* PDFDocumentWordView.h */,
 				CF8E295E1CA148B40050E080 /* PDFDocumentWordView.m */,
 				CFB5B0A91C9C075C00A049A6 /* PDFWordTableViewCell.h */,
@@ -770,6 +780,7 @@
 				CF74C8381C9FD31800474B82 /* PDFMainViewController.m in Sources */,
 				CF7E843D1C98F768000652D4 /* UITextField+VerifyNoteTextField.m in Sources */,
 				CF7E84481C98F768000652D4 /* HttpServerContext.m in Sources */,
+				CF5A50C61D4F88C30076BC77 /* PDFMuTextSelectView.m in Sources */,
 				CF7E844A1C98F768000652D4 /* NSURLRequest+RequestParams.m in Sources */,
 				CF7E842D1C98F768000652D4 /* MBProgressHUD+AlertView.m in Sources */,
 				CF7E843E1C98F768000652D4 /* UIView+Size.m in Sources */,
@@ -779,6 +790,7 @@
 				CFB5B0A71C9C017D00A049A6 /* MBProgressHUD+PDFMB.m in Sources */,
 				CFB5B0A41C9BF05E00A049A6 /* CAUserDefaultsManager.m in Sources */,
 				CF7E84331C98F768000652D4 /* UIButton+Factory.m in Sources */,
+				CF5A50C91D4F92DB0076BC77 /* PDFMuWord.m in Sources */,
 				CF758A7F1CB74E7E0098A801 /* AppDelegate+InterfaceOrientation.m in Sources */,
 				CF7E84421C98F768000652D4 /* UIViewController+NavBar.m in Sources */,
 				CF8E295F1CA148B40050E080 /* PDFDocumentWordView.m in Sources */,

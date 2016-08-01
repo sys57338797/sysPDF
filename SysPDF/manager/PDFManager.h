@@ -47,4 +47,8 @@
 -(CGSize)measurePage:(fz_page*)page;
 - (fz_page*)managerLoadPage:(int)number;
 
+
+- (NSArray *)enumerateWords:(fz_document *)doc number:(int )number;
+
+
 @end

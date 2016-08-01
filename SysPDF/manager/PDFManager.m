@@ -9,6 +9,7 @@
 #import "PDFManager.h"
 #import <MuPDF/fitz.h>
 #import <MuPDF/Mupdf/pdf.h>
+#import "PDFMuWord.h"
 
 #import "NSString+StringJudge.h"
 #import "CAUserDefaultsManager.h"
@@ -139,6 +140,103 @@
     [self.openObj setMaxPage:[self maxPageCount]];
     
     return YES;
+}
+
+- (NSArray *)enumerateWords:(fz_document *)doc number:(int )number
+{
+    fz_text_sheet *sheet = NULL;
+    fz_text_page *text = NULL;
+    fz_device *dev = NULL;
+    NSMutableArray *lns = [NSMutableArray array];
+    NSMutableArray *wds;
+    PDFMuWord *word;
+    
+    if (!lns)
+        return NULL;
+    
+    fz_var(sheet);
+    fz_var(text);
+    fz_var(dev);
+    
+    fz_try(_ctx);
+    {
+        int b, l, c;
+        
+        sheet = fz_new_text_sheet(_ctx);
+        text = fz_new_text_page(_ctx);
+        dev = fz_new_text_device(_ctx, sheet, text);
+        fz_page *page = fz_load_page(_ctx, doc, number);
+        fz_run_page(_ctx, page, dev, &fz_identity, NULL);
+        fz_drop_device(_ctx, dev);
+        dev = NULL;
+        
+        for (b = 0; b < text->len; b++)
+        {
+            fz_text_block *block;
+            
+            if (text->blocks[b].type != FZ_PAGE_BLOCK_TEXT)
+                continue;
+            
+            block = text->blocks[b].u.text;
+            
+            for (l = 0; l < block->len; l++)
+            {
+                fz_text_line *line = &block->lines[l];
+                fz_text_span *span;
+                
+                wds = [NSMutableArray array];
+                if (!wds)
+                    fz_throw(_ctx, FZ_ERROR_GENERIC, "Failed to create word array");
+                
+                word = [PDFMuWord word];
+                if (!word)
+                    fz_throw(_ctx, FZ_ERROR_GENERIC, "Failed to create word");
+                
+                for (span = line->first_span; span; span = span->next)
+                {
+                    for (c = 0; c < span->len; c++)
+                    {
+                        fz_text_char *ch = &span->text[c];
+                        fz_rect bbox;
+                        CGRect rect;
+                        
+                        fz_text_char_bbox(_ctx, &bbox, span, c);
+                        rect = CGRectMake(bbox.x0, bbox.y0, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0);
+                        
+                        if (ch->c != ' ')
+                        {
+                            [word appendChar:ch->c withRect:rect];
+                        }
+                        else if (word.string.length > 0)
+                        {
+                            [wds addObject:word];
+                            word = [PDFMuWord word];
+                            if (!word)
+                                fz_throw(_ctx, FZ_ERROR_GENERIC, "Failed to create word");
+                        }
+                    }
+                }
+                
+                if (word.string.length > 0)
+                    [wds addObject:word];
+                
+                if ([wds count] > 0)
+                    [lns addObject:wds];
+            }
+        }
+    }
+    fz_always(_ctx);
+    {
+        fz_drop_text_page(_ctx, text);
+        fz_drop_text_sheet(_ctx, sheet);
+        fz_drop_device(_ctx, dev);
+    }
+    fz_catch(_ctx)
+    {
+        lns = NULL;
+    }
+    
+    return lns;
 }
 
 -(CGSize)fitPageToScreen:(CGSize)page screenSize:(CGSize)screen

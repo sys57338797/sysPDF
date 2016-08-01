@@ -104,7 +104,9 @@
 
 - (void)onTap:(id)sender
 {
-    NSLog(@"mutowuren111");
+    NSArray *pdfMUWordArray = [[PDFManager shareInstance] enumerateWords:_doc number:-_number];
+    
+    NSLog(@"mutouren!!!");
 }
 
 - (void)setContentSize:(CGSize)contentSize
