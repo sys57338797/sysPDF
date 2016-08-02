@@ -33,6 +33,7 @@
 
 
 @property (nonatomic, readonly) dispatch_queue_t queue;
+@property (nonatomic, strong) UIView *tapView;
 @property (nonatomic, strong) NSArray *autoSubViewConstraint;
 
 @end
@@ -93,9 +94,27 @@
         
         [self resetZoomAnimated:NO];
         
+    UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTap:)];
+    [singleTapGestureRecognizer setNumberOfTapsRequired:1];
+    [self addGestureRecognizer:singleTapGestureRecognizer];
+        
 //        [self loadPage];
     }
     return self;
+}
+
+- (void)onTap:(UIGestureRecognizer*)sender
+{
+    CGPoint point = [sender locationInView:sender.view];
+    NSLog(@"handleSingleTap!pointx:%f,y:%f",point.x,point.y);
+    
+    if (_tapView) {
+        [_tapView removeFromSuperview];
+        _tapView = nil;
+    }
+    
+    self.tapView.center = point;
+    [self addSubview:self.tapView];
 }
 
 - (void)setContentSize:(CGSize)contentSize
@@ -334,6 +353,12 @@
     [self setZoomScale: 1 animated: animated];
 }
 
+- (void)removeFromSuperview
+{
+    _cancel = YES;
+    [super removeFromSuperview];
+}
+
 - (int)number
 {
     return _number;
@@ -350,11 +375,17 @@
     return _contentImageView;
 }
 
-- (void)removeFromSuperview
+- (UIView *)tapView
 {
-    _cancel = YES;
-    [super removeFromSuperview];
+    if (!_tapView) {
+        _tapView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
+        [_tapView setBackgroundColor:[UIColor redColor]];
+    }
+    
+    return _tapView;
 }
+
+
 
 //- (void)updateConstraints
 //{

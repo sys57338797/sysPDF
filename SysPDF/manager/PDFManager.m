@@ -257,6 +257,7 @@ static void releasePixmap(void *info, const void *data, size_t size)
     bbox.y1 = tileRect.origin.y + tileRect.size.height;
     fz_rect_from_irect(&rect, &bbox);
     
+    [self.theLock lock];
     fz_var(dev);
     fz_var(pix);
     fz_try(_ctx)
@@ -275,8 +276,10 @@ static void releasePixmap(void *info, const void *data, size_t size)
     fz_catch(_ctx)
     {
         fz_drop_pixmap(_ctx, pix);
+        [self.theLock unlock];
         return NULL;
     }
+    [self.theLock unlock];
     
     return pix;
 }
