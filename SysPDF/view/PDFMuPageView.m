@@ -103,18 +103,14 @@
     return self;
 }
 
-- (void)onTap:(UIGestureRecognizer*)sender
+- (void)onTap:(id)sender
 {
     CGPoint point = [sender locationInView:sender.view];
     NSLog(@"handleSingleTap!pointx:%f,y:%f",point.x,point.y);
     
-    if (_tapView) {
-        [_tapView removeFromSuperview];
-        _tapView = nil;
-    }
+    NSArray *pdfMUWordArray = [[PDFManager shareInstance] enumerateWords:_doc number:-_number];
     
-    self.tapView.center = point;
-    [self addSubview:self.tapView];
+    NSLog(@"mutouren!!!");
 }
 
 - (void)setContentSize:(CGSize)contentSize
@@ -281,7 +277,7 @@
                     }
                     
                     _tileView = [[UIImageView alloc] initWithFrame: frame];
-                    [_tileView setBackgroundColor:[UIColor redColor]];
+                    [_tileView setBackgroundColor:[UIColor clearColor]];
                     [_tileView setImage:image];
                     [self addSubview:_tileView];
                     if (_hitView)
