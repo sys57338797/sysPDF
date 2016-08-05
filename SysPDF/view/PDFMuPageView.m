@@ -8,8 +8,9 @@
 
 #import "PDFMuPageView.h"
 #import "PDFManager.h"
-#import "PDFMuHitView.h"
+#import "PDFMuTextSelectView.h"
 #import "PureLayout.h"
+#import "PDFMuWord.h"
 
 
 @interface PDFMuPageView ()
@@ -29,9 +30,10 @@
 
 @property (nonatomic, strong) UIImageView *contentImageView;
 @property (nonatomic, strong) UIImageView *tileView;
-@property (nonatomic, strong) PDFMuHitView *hitView;
+@property (nonatomic, strong) PDFMuTextSelectView *selectView;
 
 
+@property (nonatomic, strong) NSArray *words;
 @property (nonatomic, readonly) dispatch_queue_t queue;
 @property (nonatomic, strong) UIView *tapView;
 @property (nonatomic, strong) NSArray *autoSubViewConstraint;
@@ -94,23 +96,50 @@
         
         [self resetZoomAnimated:NO];
         
-    UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTap:)];
-    [singleTapGestureRecognizer setNumberOfTapsRequired:1];
-    [self addGestureRecognizer:singleTapGestureRecognizer];
+        UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTap:)];
+        [singleTapGestureRecognizer setNumberOfTapsRequired:1];
+        [self addGestureRecognizer:singleTapGestureRecognizer];
         
 //        [self loadPage];
     }
     return self;
 }
 
-- (void)onTap:(id)sender
+- (void)onTap:(UIGestureRecognizer*)sender
 {
-    CGPoint point = [sender locationInView:sender.view];
-    NSLog(@"handleSingleTap!pointx:%f,y:%f",point.x,point.y);
+    CGPoint selfPoint = [sender locationInView:sender.view];
+    CGPoint point = [sender locationInView:self.contentImageView];
+    NSLog(@"selfPpoint===>x:%f,y:%f///ppoint===>x:%f,y:%f",selfPoint.x,selfPoint.y,point.x,point.y);
     
-    NSArray *pdfMUWordArray = [[PDFManager shareInstance] enumerateWords:_doc number:-_number];
-    
-    NSLog(@"mutouren!!!");
+    for (NSArray *line in self.words) {
+        for (PDFMuWord *word in line) {
+            if (CGRectContainsPoint(word.rect, point)) {
+                NSLog(@"word.rect===>%@",NSStringFromCGRect(word.rect));
+                if (self.selectView) {
+                    [self.selectView removeFromSuperview];
+                }
+                self.selectView = [[PDFMuTextSelectView alloc] initWithWords:@[line] pageSize:_pageSize start:CGPointMake(word.rect.origin.x, word.rect.origin.y) end:CGPointMake(CGRectGetMaxX(word.rect), CGRectGetMaxY(word.rect))];
+                if (self.contentImageView)
+                    [self.selectView setFrame:[self.contentImageView frame]];
+                [self addSubview:self.selectView];
+                return;
+            }
+        }
+    }
+}
+
+- (void)initWords
+{
+    dispatch_async(self.queue, ^{
+        [self ensurePageLoaded];
+        self.words = [[PDFManager shareInstance] enumerateWords:_doc fz_page:_page];
+//        dispatch_sync(dispatch_get_main_queue(), ^{
+//            self.selectView = [[PDFMuTextSelectView alloc] initWithWords:self.words pageSize:_pageSize];
+//            if (self.contentImageView)
+//                [self.selectView setFrame:[self.contentImageView frame]];
+//            [self addSubview:self.selectView];
+//        });
+    });
 }
 
 - (void)setContentSize:(CGSize)contentSize
@@ -125,6 +154,7 @@
 {
     if (!CGSizeEqualToSize(self.bounds.size, bounds.size)) {
         [self loadPage];
+        [self initWords];
     }
     [super setBounds:bounds];
 }
@@ -160,12 +190,8 @@
 
 - (void)displayImage: (UIImage*)image
 {
-    if (_hitView)
-        [_hitView setPageSize:_pageSize];
     
     [self.contentImageView setImage:image];
-    if (_hitView)
-        [self bringSubviewToFront:_hitView];
     
     [self resizeImage];
 }
@@ -280,8 +306,8 @@
                     [_tileView setBackgroundColor:[UIColor clearColor]];
                     [_tileView setImage:image];
                     [self addSubview:_tileView];
-                    if (_hitView)
-                        [self bringSubviewToFront: _hitView];
+                    if (self.selectView)
+                        [self bringSubviewToFront:self.selectView];
                 } else {
                     printf("discard tile\n");
                 }
@@ -295,13 +321,16 @@
 {
     if (self.contentImageView)
     {
-//        CGRect frm = [self.contentImageView frame];
+        CGRect frm = [self.contentImageView frame];
         
         CGFloat offsetX = MAX((self.bounds.size.width - self.contentSize.width) * 0.5, 0.0);
         CGFloat offsetY = MAX((self.bounds.size.height - self.contentSize.height) * 0.5, 0.0);
         
         self.contentImageView.center = CGPointMake(self.contentSize.width * 0.5 + offsetX,
                                      self.contentSize.height * 0.5 + offsetY);
+        if (self.selectView) {
+            [self.selectView setFrame:frm];
+        }
     }
 }
 

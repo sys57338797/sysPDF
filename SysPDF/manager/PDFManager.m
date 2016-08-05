@@ -142,7 +142,7 @@
     return YES;
 }
 
-- (NSArray *)enumerateWords:(fz_document *)doc number:(int )number
+- (NSArray *)enumerateWords:(fz_document *)doc fz_page:(fz_page*)page
 {
     fz_text_sheet *sheet = NULL;
     fz_text_page *text = NULL;
@@ -165,7 +165,6 @@
         sheet = fz_new_text_sheet(_ctx);
         text = fz_new_text_page(_ctx);
         dev = fz_new_text_device(_ctx, sheet, text);
-        fz_page *page = fz_load_page(_ctx, doc, number);
         fz_run_page(_ctx, page, dev, &fz_identity, NULL);
         fz_drop_device(_ctx, dev);
         dev = NULL;
@@ -205,9 +204,10 @@
                         
                         if (ch->c != ' ')
                         {
-                            [word appendChar:ch->c withRect:rect];
+                            unichar buf = ch->c;
+                            [word appendChar:buf withRect:rect];
                         }
-                        else if (word.string.length > 0)
+                        else if (word.content.length > 0)
                         {
                             [wds addObject:word];
                             word = [PDFMuWord word];
@@ -217,7 +217,7 @@
                     }
                 }
                 
-                if (word.string.length > 0)
+                if (word.content.length > 0)
                     [wds addObject:word];
                 
                 if ([wds count] > 0)

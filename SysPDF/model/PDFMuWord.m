@@ -12,7 +12,7 @@
 	self = [super init];
 	if (self)
 	{
-		self.string = [NSMutableString string];
+		_content = [[NSMutableString alloc] initWithCapacity:0];
 		self.rect = CGRectNull;
 	}
 	return self;
@@ -25,7 +25,7 @@
 
 - (void) appendChar:(unichar)c withRect:(CGRect)r
 {
-	[self.string appendFormat:@"%C", c];
+	[_content appendFormat:@"%C", c];
 	self.rect = CGRectUnion(self.rect, r);
 }
 

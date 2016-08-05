@@ -12,6 +12,19 @@
 	CGPoint end;
 }
 
+- (id) initWithWords:(NSArray *)_words pageSize:(CGSize)_pageSize start:(CGPoint)s end:(CGPoint)e
+{
+    self = [self initWithWords:_words pageSize:_pageSize];
+    if (self) {
+        start = s;
+        end = e;
+        
+        [self setNeedsDisplay];
+    }
+    
+    return self;
+}
+
 - (id) initWithWords:(NSArray *)_words pageSize:(CGSize)_pageSize
 {
 	self = [super initWithFrame:CGRectMake(0,0,100,100)];
@@ -21,8 +34,9 @@
 		words = [_words copy];
 		pageSize = _pageSize;
 		color = [UIColor colorWithRed:0x25/255.0 green:0x72/255.0 blue:0xAC/255.0 alpha:0.5];
-		UIPanGestureRecognizer *rec = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onDrag:)];
-		[self addGestureRecognizer:rec];
+//		UIPanGestureRecognizer *rec = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onDrag:)];
+//		[self addGestureRecognizer:rec];
+        
 	}
 	return self;
 }
@@ -56,7 +70,7 @@
 		} onWord:^(PDFMuWord *w) {
 			if (line.length > 0)
 				[line appendString:@" "];
-			[line appendString:w.string];
+			[line appendString:w.content];
 		} onEndLine:^{
 			if (text.length > 0)
 				[text appendString:@"\n"];
@@ -66,20 +80,20 @@
 	return text;
 }
 
--(void) onDrag:(UIPanGestureRecognizer *)rec
-{
-    CGSize scale = [[PDFManager shareInstance] fitPageToScreen:pageSize screenSize:self.bounds.size];
-	CGPoint p = [rec locationInView:self];
-	p.x /= scale.width;
-	p.y /= scale.height;
-
-	if (rec.state == UIGestureRecognizerStateBegan)
-		start = p;
-
-	end = p;
-
-	[self setNeedsDisplay];
-}
+//-(void) onDrag:(UIPanGestureRecognizer *)rec
+//{
+//    CGSize scale = [[PDFManager shareInstance] fitPageToScreen:pageSize screenSize:self.bounds.size];
+//	CGPoint p = [rec locationInView:self];
+//	p.x /= scale.width;
+//	p.y /= scale.height;
+//
+//	if (rec.state == UIGestureRecognizerStateBegan)
+//		start = p;
+//
+//	end = p;
+//
+//	[self setNeedsDisplay];
+//}
 
 - (void) drawRect:(CGRect)rect
 {

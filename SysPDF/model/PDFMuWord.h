@@ -10,7 +10,7 @@
 
 @interface PDFMuWord : NSObject
 
-@property (nonatomic, copy) NSMutableString *string;
+@property (nonatomic, copy, readonly) NSMutableString *content;
 @property (nonatomic, assign) CGRect rect;
 
 
