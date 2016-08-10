@@ -96,49 +96,34 @@
         
         [self resetZoomAnimated:NO];
         
-        UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTap:)];
-        [singleTapGestureRecognizer setNumberOfTapsRequired:1];
-        [self addGestureRecognizer:singleTapGestureRecognizer];
+//        UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTap:)];
+//        [singleTapGestureRecognizer setNumberOfTapsRequired:1];
+//        [self addGestureRecognizer:singleTapGestureRecognizer];
         
 //        [self loadPage];
     }
     return self;
 }
 
-- (void)onTap:(UIGestureRecognizer*)sender
-{
-    CGPoint selfPoint = [sender locationInView:sender.view];
-    CGPoint point = [sender locationInView:self.contentImageView];
-    NSLog(@"selfPpoint===>x:%f,y:%f///ppoint===>x:%f,y:%f",selfPoint.x,selfPoint.y,point.x,point.y);
-    
-    for (NSArray *line in self.words) {
-        for (PDFMuWord *word in line) {
-            if (CGRectContainsPoint(word.rect, point)) {
-                NSLog(@"word.rect===>%@",NSStringFromCGRect(word.rect));
-                if (self.selectView) {
-                    [self.selectView removeFromSuperview];
-                }
-                self.selectView = [[PDFMuTextSelectView alloc] initWithWords:@[line] pageSize:_pageSize start:CGPointMake(word.rect.origin.x, word.rect.origin.y) end:CGPointMake(CGRectGetMaxX(word.rect), CGRectGetMaxY(word.rect))];
-                if (self.contentImageView)
-                    [self.selectView setFrame:[self.contentImageView frame]];
-                [self addSubview:self.selectView];
-                return;
-            }
-        }
-    }
-}
+//- (void)onTap:(UIGestureRecognizer*)sender
+//{
+//    CGPoint selfPoint = [sender locationInView:sender.view];
+//    CGPoint point = [sender locationInView:self.contentImageView];
+//    NSLog(@"selfPpoint===>x:%f,y:%f///ppoint===>x:%f,y:%f",selfPoint.x,selfPoint.y,point.x,point.y);
+//    
+//}
 
 - (void)initWords
 {
     dispatch_async(self.queue, ^{
         [self ensurePageLoaded];
         self.words = [[PDFManager shareInstance] enumerateWords:_doc fz_page:_page];
-//        dispatch_sync(dispatch_get_main_queue(), ^{
-//            self.selectView = [[PDFMuTextSelectView alloc] initWithWords:self.words pageSize:_pageSize];
-//            if (self.contentImageView)
-//                [self.selectView setFrame:[self.contentImageView frame]];
-//            [self addSubview:self.selectView];
-//        });
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            self.selectView = [[PDFMuTextSelectView alloc] initWithWords:self.words pageSize:_pageSize];
+            if (self.contentImageView)
+                [self.selectView setFrame:[self.contentImageView frame]];
+            [self addSubview:self.selectView];
+        });
     });
 }
 

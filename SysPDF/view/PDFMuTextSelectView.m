@@ -10,6 +10,7 @@
 	UIColor *color;
 	CGPoint start;
 	CGPoint end;
+    CGPoint selectPoint;
 }
 
 - (id) initWithWords:(NSArray *)_words pageSize:(CGSize)_pageSize start:(CGPoint)s end:(CGPoint)e
@@ -34,8 +35,9 @@
 		words = [_words copy];
 		pageSize = _pageSize;
 		color = [UIColor colorWithRed:0x25/255.0 green:0x72/255.0 blue:0xAC/255.0 alpha:0.5];
-//		UIPanGestureRecognizer *rec = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onDrag:)];
-//		[self addGestureRecognizer:rec];
+        UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTap:)];
+        [singleTapGestureRecognizer setNumberOfTapsRequired:1];
+        [self addGestureRecognizer:singleTapGestureRecognizer];
         
 	}
 	return self;
@@ -80,6 +82,18 @@
 	return text;
 }
 
+- (void)onTap:(UIGestureRecognizer*)sender
+{
+    CGSize scale = [[PDFManager shareInstance] fitPageToScreen:pageSize screenSize:self.bounds.size];
+    CGPoint p = [sender locationInView:self];
+    p.x /= scale.width;
+    p.y /= scale.height;
+
+    selectPoint = p;
+    
+    [self setNeedsDisplay];
+}
+
 //-(void) onDrag:(UIPanGestureRecognizer *)rec
 //{
 //    CGSize scale = [[PDFManager shareInstance] fitPageToScreen:pageSize screenSize:self.bounds.size];
@@ -100,19 +114,27 @@
 	CGSize scale = [[PDFManager shareInstance] fitPageToScreen:pageSize screenSize:self.bounds.size];
 	CGContextRef cref = UIGraphicsGetCurrentContext();
 	CGContextScaleCTM(cref, scale.width, scale.height);
-	__block CGRect r;
+//	__block CGRect r;
 
 	[color set];
 
-	[PDFMuWord selectFrom:start to:end fromWords:words
-		onStartLine:^{
-			r = CGRectNull;
-		} onWord:^(PDFMuWord *w) {
-			r = CGRectUnion(r, w.rect);
-		} onEndLine:^{
-			if (!CGRectIsNull(r))
-				UIRectFill(r);
-		}];
+    if (!CGPointEqualToPoint(selectPoint, CGPointZero)) {
+        [PDFMuWord selectFromPoint:selectPoint fromWords:words onFinish:^(PDFMuWord *w) {
+            if (!CGRectIsNull(w.rect)) {
+                UIRectFill(w.rect);
+            }
+        }];
+    }
+    
+//	[PDFMuWord selectFrom:start to:end fromWords:words
+//		onStartLine:^{
+//			r = CGRectNull;
+//		} onWord:^(PDFMuWord *w) {
+//			r = CGRectUnion(r, w.rect);
+//		} onEndLine:^{
+//			if (!CGRectIsNull(r))
+//				UIRectFill(r);
+//		}];
 }
 
 @end

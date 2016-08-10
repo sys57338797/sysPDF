@@ -193,6 +193,7 @@
                 
                 for (span = line->first_span; span; span = span->next)
                 {
+                    CGRect r = word.rect;
                     for (c = 0; c < span->len; c++)
                     {
                         fz_text_char *ch = &span->text[c];
@@ -205,12 +206,16 @@
                         if (ch->c != ' ')
                         {
                             unichar buf = ch->c;
-                            [word appendChar:buf withRect:rect];
+                            [word appendChar:buf withRect:rect atRect:word.rect];
+                        }
+                        else if (ch->c == '-' && c+1 > span->len) {
+                            
                         }
                         else if (word.content.length > 0)
                         {
                             [wds addObject:word];
                             word = [PDFMuWord word];
+                            r = word.rect;
                             if (!word)
                                 fz_throw(_ctx, FZ_ERROR_GENERIC, "Failed to create word");
                         }

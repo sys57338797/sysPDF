@@ -23,10 +23,42 @@
 	return [[PDFMuWord alloc] init];
 }
 
-- (void) appendChar:(unichar)c withRect:(CGRect)r
+- (void) appendChar:(unichar)c withRect:(CGRect)rect atRect:(CGRect)atRect
 {
 	[_content appendFormat:@"%C", c];
-	self.rect = CGRectUnion(self.rect, r);
+	atRect = CGRectUnion(atRect, rect);
+}
+
++ (void) selectFromPoint:(CGPoint)pt fromWords:(NSArray *)words onFinish:(void (^)(PDFMuWord *))finishBlock
+{
+    PDFMuWord *resWord = nil;
+    for (NSArray *line in words)
+    {
+        PDFMuWord *fst = [line objectAtIndex:0];
+        float ltop = fst.rect.origin.y;
+        float lbot = ltop + fst.rect.size.height;
+        
+        if (pt.y > ltop &&pt.y < lbot) {
+            for (PDFMuWord *word in line)
+            {
+                float wleft = word.rect.origin.x;
+                float wright = wleft + word.rect.size.width;
+                
+                if (wright > pt.x && wleft < pt.x)
+                {
+                    resWord = word;
+                    break;
+                }
+                
+            }
+        }
+        
+        if (resWord) {
+            break;
+        }
+    }
+    
+    finishBlock(resWord);
 }
 
 + (void) selectFrom:(CGPoint)pt1 to:(CGPoint)pt2 fromWords:(NSArray *)words onStartLine:(void (^)(void))startBlock onWord:(void (^)(PDFMuWord *))wordBlock onEndLine:(void (^)(void))endBLock
