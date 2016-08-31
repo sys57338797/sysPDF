@@ -400,8 +400,6 @@
     float x = [self.scrollView contentOffset].x +  width * 0.5f;
     int current = x / width;
     
-    NSLog(@"current page count ===>%d",current);
-    
     if ([PDFManager shareInstance].currentPage != current) {
         [[PDFManager shareInstance] setCurrentPage:current];
         
@@ -572,7 +570,7 @@
     }];
     
     for (UIView<PDFMuPageViewDelegate> *view in subViews) {
-        NSLog(@"view.number===>%d",[view number]);
+//        NSLog(@"view.number===>%d",[view number]);
         if (view.translatesAutoresizingMaskIntoConstraints) {
             [view autoPinEdgeToSuperviewEdge:ALEdgeTop];
             [view autoMatchDimension:ALDimensionHeight toDimension:ALDimensionHeight ofView:self.scrollView];

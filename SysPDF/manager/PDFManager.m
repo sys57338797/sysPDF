@@ -158,6 +158,8 @@
     fz_var(text);
     fz_var(dev);
     
+    [self.theLock lock];
+    
     fz_try(_ctx);
     {
         int b, l, c;
@@ -207,9 +209,10 @@
                         {
                             unichar buf = ch->c;
                             [word appendChar:buf withRect:rect atRect:word.rect];
-                        }
-                        else if (ch->c == '-' && c+1 > span->len) {
                             
+                            if (ch->c == '-' && c+1 >= span->len) {
+                                NSLog(@"word.content===%@",word.content);
+                            }
                         }
                         else if (word.content.length > 0)
                         {
@@ -238,9 +241,11 @@
     }
     fz_catch(_ctx)
     {
+        [self.theLock unlock];
         lns = NULL;
     }
     
+    [self.theLock unlock];
     return lns;
 }
 
